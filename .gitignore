@@ -2,3 +2,4 @@ stack_knowledge/__pycache__
 stack_knowledge/views/__pycache__
 stack_knowledge/scripts/__pycache__
 stack_knowledge/stack_knowledge.db
+stack_knowledge/models/__pycache__/
