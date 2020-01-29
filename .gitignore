@@ -3,3 +3,5 @@ stack_knowledge/views/__pycache__
 stack_knowledge/scripts/__pycache__
 stack_knowledge/stack_knowledge.db
 stack_knowledge/models/__pycache__/
+.DS_Store
+stack_knowledge/templates/.DS_Store

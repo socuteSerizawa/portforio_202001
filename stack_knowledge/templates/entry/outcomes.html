@@ -1,6 +1,6 @@
-{% extends "layout.html" %}
+{% extends "entry/settings/temp_commons.html" %}
 
-{% block body %}
+{% block contents %}
 <form action="{{ url_for('entry.entry_outcomes')}}" method=post class=entry_outcomes>
 	<div class="form-group">
 		<label for="InputTitle">タイトル</label>
