@@ -9,7 +9,7 @@
 
   <div class="container dropbox">
 	<div class="row">
-		{% for i in range(3) %}
+		{% for key in display_dict.display_dropbox.keys()  %}
 			<div class="col">
 				{% include "parts/dropbox.html" %}
 		 	</div>
