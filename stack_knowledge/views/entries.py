@@ -10,7 +10,7 @@ def show_stacks():
 	hoge_entry_datas = Entry.query.order_by(Entry.id.desc()).all()
 	return render_template('display/index.html', hoge_entry_datas = hoge_entry_datas)
 
-@entry.route('/display/outcomes', methods = ['GET'])
+@entry.route('/entry/outcomes', methods = ['GET'])
 def new_entry():
 	return render_template('entry/outcomes.html')
 
