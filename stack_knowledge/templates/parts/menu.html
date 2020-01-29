@@ -1,7 +1,9 @@
 {% block menu %}
+
 <div class="list-group" style="max-width: 400px;">
 	<a href="{{ url_for('entry.display_outcomes')}}" class="list-group-item list-group-item-action ">outcomes</a>
 	<a href="{{ url_for('entry.display_authors' )}}" class="list-group-item list-group-item-action">authors</a>
 	<a href="{{ url_for('entry.display_subjects')}}" class="list-group-item list-group-item-action">subjects</a>
 </div>
+
 {% endblock %}
