@@ -1,6 +1,11 @@
-{% extends "entry/layout.html" %}
+{% extends "display/layout.html" %}
+
+{% block menu %}
+{% include "display/menu.html" %}
+{% endblock %}
 
 {% block body %}
+
 <form action="{{ url_for('entry.new_entry')}}" method="GET">
 	<button type="submit" class="btn btn-primary">データベースを編集</button>
 </form>

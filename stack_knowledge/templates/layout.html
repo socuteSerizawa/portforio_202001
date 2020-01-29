@@ -9,11 +9,23 @@
 <link rel=stylesheet href="{{ url_for('static', filename='style.css') }}">
 
 <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('entry.show_stacks') }}">Stack Knowledge</a>
-    </nav>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="{{ url_for('entry.show_stacks') }}">Stack Knowledge</a>
+	</nav>
 
-    <div class="blog-body">
-    	{% block body %}{% endblock %}
-    </div>
+	<div class="container-contents">
+		<div class="row">
+			<div class="col-2">
+				<div class="menu">
+					{% block menu %}{% endblock %}
+				</div>
+			</div>
+			<div class="col-10">
+				<div class="contents">
+					{% block body %}{% endblock %}
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>
