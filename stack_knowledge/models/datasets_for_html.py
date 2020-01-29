@@ -6,6 +6,8 @@ class Datasets_For_Layout():
 	display_dropbox = {}
 
 	def __init__(self):
+		self.menu = []
+		self.display_dropbox = {}
 		self.menu = parameters
 
 	def set_tables(self, name, tables):

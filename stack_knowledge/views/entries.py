@@ -17,7 +17,6 @@ dataset_outcomes_layout.set_tables('subjects', Entry.query.order_by(Entry.id.des
 @entry.route('/')
 def show_stacks():
 	hoge_entry_datas = Entry.query.order_by(Entry.id.desc()).all()
-
 	return render_template('index.html', hoge_entry_datas = hoge_entry_datas, display_dict = dataset_outcomes_layout)
 
 @entry.route('/entry/outcomes', methods = ['GET'])

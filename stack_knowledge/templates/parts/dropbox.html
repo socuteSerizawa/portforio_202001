@@ -1,12 +1,26 @@
-<div class="dropdown">
-	<!-- 切替ボタンの設定 -->
-	<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	ドロップダウンリンク
-	</a>
-	<!-- ドロップメニューの設定 -->
-	<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-		<a class="dropdown-item" href="#">メニュー1</a>
-		<a class="dropdown-item" href="#">メニュー2</a>
-		<a class="dropdown-item" href="#">メニュー3</a>
-	</div><!-- /.dropdown-menu -->
+<div class="container dropbox">
+	<div class="row">
+		{% for menu_key in display_dict.menu.keys()  %}
+			<div class="col">
+				{% for dropbox_key,values in display_dict.display_dropbox.items() %}
+					{% if menu_key == dropbox_key %}
+						<p>{{ dropbox_key }}</p>
+						<!-- 切替ボタンの設定 -->
+						<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						選択してください
+						</a>
+						<!-- ドロップメニューの設定 -->
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+							{% for value in values %}
+								<a class="dropdown-item" href="#">{{ value }}</a>
+							{% endfor %}
+						</div><!-- /.dropdown-menu -->
+					{% endif %}
+				{% endfor %}
+		 	</div>
+	 	{% endfor %}
+	</div>
 </div>
+
+
+

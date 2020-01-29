@@ -7,16 +7,9 @@
 
 {% block body %}
 
-  <div class="container dropbox">
-	<div class="row">
-		{% for key in display_dict.display_dropbox.keys()  %}
-			<div class="col">
-				{% include "parts/dropbox.html" %}
-		 	</div>
-	 	{% endfor %}
-	</div>
-  </div>
-  {% block contents %}{% endblock %}
+	{% include "parts/dropbox.html" %}
+
+	{% block contents %}{% endblock %}
 
   <form action="{{ url_for('entry.new_entry')}}" method="GET">
 	<button type="submit" class="btn btn-primary">データベースを編集</button>
