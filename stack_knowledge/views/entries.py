@@ -8,13 +8,13 @@ entry = Blueprint('entry', __name__)
 @entry.route('/')
 def show_stacks():
 	hoge_entry_datas = Entry.query.order_by(Entry.id.desc()).all()
-	return render_template('entries/index.html', hoge_entry_datas = hoge_entry_datas)
+	return render_template('entry/index.html', hoge_entry_datas = hoge_entry_datas)
 
-@entry.route('/entries/entry_outcomes', methods = ['GET'])
+@entry.route('/entry/outcomes', methods = ['GET'])
 def new_entry():
-	return render_template('entries/entry_outcomes.html')
+	return render_template('entry/outcomes.html')
 
-@entry.route('/entries/entry_outcomes', methods = ['POST'])
+@entry.route('/entry/outcomes', methods = ['POST'])
 def entry_outcomes():
 
 	hoge_entry = Entry(
@@ -26,4 +26,4 @@ def entry_outcomes():
 	db.session.close()
 
 	hoge_entry_datas = Entry.query.order_by(Entry.id.desc()).all()
-	return render_template('entries/index.html', hoge_entry_datas = hoge_entry_datas)
+	return render_template('entry/index.html', hoge_entry_datas = hoge_entry_datas)
