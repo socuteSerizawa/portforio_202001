@@ -6,3 +6,4 @@ stack_knowledge/models/__pycache__/
 .DS_Store
 stack_knowledge/templates/.DS_Store
 stack_knowledge/static/__pycache__/
+__pycache__
