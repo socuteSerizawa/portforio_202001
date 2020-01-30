@@ -62,7 +62,7 @@ def display_subjects():
 	dataset_subjects_layout.set_tables('subjects', Outcomes.query.order_by(Outcomes.id.desc()).all())
 	return render_template('display/subjects.html', display_dict = dataset_subjects_layout)
 
-@entry.route('/display/outcomes', methods = ['POST'])
+@entry.route('/', methods = ['POST'])
 def entry_outcomes():
 
 	return render_template('index.html', hoge_entry_datas = hoge_entry_datas, display_dict = dataset_outcomes_layout)
