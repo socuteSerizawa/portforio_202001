@@ -20,7 +20,7 @@ class Outcomes(db.Model):
 		self.text = text
 
 	def __repr__(self):
-		return '<Entry id:{}>'.format(self.id)
+		return '<Entry id:{} created_at:{} overwrite_at:{} times:{} author_id:{} text:{}>'.format(self.id, self.created_at, self.overwrite_at, self.times, self.author_id, self.text)
 
 class OutcomesRelated(db.Model):
 	__tablename__ = 'outcomes_related'
@@ -33,7 +33,7 @@ class OutcomesRelated(db.Model):
 		self.subject_related_id = subject_related_id
 
 	def __repr__(self):
-		return '<Entry id:{}>'.format(self.id)
+		return '<Entry id:{} outcomes_id:{} subject_related_id:{}>'.format(self.id, self.outcomes_id, self.subject_related_id)
 
 class Author(db.Model):
 	__tablename__ = 'authors'
@@ -73,4 +73,4 @@ class SubjectsRelated(db.Model):
 		self.related_id = related_id
 
 	def __repr__(self):
-		return '<Entry id:{}>'.format(self.id)
+		return '<Entry id:{} related_id:{}>'.format(self.id, self.related_id)

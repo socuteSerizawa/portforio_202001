@@ -12,33 +12,59 @@ dataset_subjects_layout = Datasets_For_Layout()
 
 @entry.route('/')
 def show_stacks():
+	'''
+	hoge_entry = Author(
+		name = 'Taroooo'
+		)
+	db.session.add(hoge_entry)
+	db.session.commit()
 
-	dataset_outcomes_layout.set_tables('outcomes', Outcomes.query.order_by(Outcomes.id.desc()).all())
-	dataset_outcomes_layout.set_tables('authors' , Outcomes.query.order_by(Outcomes.id.desc()).all())
-	dataset_outcomes_layout.set_tables('subjects', Outcomes.query.order_by(Outcomes.id.desc()).all())
+	hoge_entry = Subjects(
+		name = 'math'
+		)
+	db.session.add(hoge_entry)
+	hoge_entry = Subjects(
+		name = 'science'
+		)
+	db.session.add(hoge_entry)
+	db.session.commit()
 
 	hoge_entry = Outcomes(
 		overwrite_at = datetime.utcnow(),
 		times  = 1,
-		author_id = 2,
+		author_id = 1,
 		text = 'testd'
 		)
 	db.session.add(hoge_entry)
 	db.session.commit()
 
-	hoge_entry = Author(
-		name = 'jun2'
+	hoge_entry = OutcomesRelated(
+		outcomes_id = 1,
+		subject_related_id  = 1,
+		)
+	db.session.add(hoge_entry)
+	hoge_entry = OutcomesRelated(
+		outcomes_id = 1,
+		subject_related_id  = 2,
 		)
 	db.session.add(hoge_entry)
 	db.session.commit()
+	'''
+
+	dataset_outcomes_layout.set_tables('outcomes', Outcomes.query.order_by(Outcomes.id.desc()).all())
+	dataset_outcomes_layout.set_tables('authors' , Author.query.order_by(Author.id.desc()).all())
+	dataset_outcomes_layout.set_tables('subjects', Subjects.query.order_by(Subjects.id.desc()).all())
 
 	hoge_entry_datas = Outcomes.query.order_by(Outcomes.id.desc()).all()
 
-	users = db.session.query(Outcomes, Author).join(Outcomes, Outcomes.author_id == Author.id).all()
+	# users = db.session.query(Outcomes, Author).join(Author).all()
 	# users : list
 	# users[0] = (result:'Outcomes', result:'Author') : tupple
 	# users[0][0] = <class 'stack_knowledge.models.entries.Outcomes'>
 	# But 'print(users[0][0])' display __repr__()
+
+	# subject = db.session.query(OutcomesRelated, Subjects, Outcomes).join(Outcomes).join(Subjects).all()
+	# db.session.query(OutcomesRelated, Subjects, Outcomes) : outer join
 
 	return render_template('index.html', hoge_entry_datas = hoge_entry_datas, display_dict = dataset_outcomes_layout)
 
