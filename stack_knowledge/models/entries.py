@@ -6,41 +6,55 @@ class Outcomes(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	created_at = db.Column(db.DateTime)
 	overwrite_at = db.Column(db.DateTime)
-	times = db.Column(db.Float)
+	stack_times = db.Column(db.Float)
 	author_id = db.Column(db.Integer, db.ForeignKey('authors.id'))
 	text = db.Column(db.String(50))
 
-	outcomes_related = db.relationship('OutcomesRelated', backref = 'outcome', lazy = True)
+	related_outcomes_and_subjects_groups_id = db.relationship('RelatedOutcomesAndSubjectsGroups', backref = 'outcomes', lazy = True)
 
-	def __init__(self, overwrite_at = None, times = None, author_id = None, text = None):
+	def __init__(self, overwrite_at = None, stack_times = None, author_id = None, text = None):
 		self.created_at = datetime.utcnow()
 		self.overwrite_at = overwrite_at
-		self.times = times
+		self.stack_times = stack_times
 		self.author_id = author_id
 		self.text = text
 
 	def __repr__(self):
-		return '<Entry id:{} created_at:{} overwrite_at:{} times:{} author_id:{} text:{}>'.format(self.id, self.created_at, self.overwrite_at, self.times, self.author_id, self.text)
+		return '<Entry id:{} created_at:{} overwrite_at:{} stack_times:{} author_id:{} text:{}>'.format(self.id, self.created_at, self.overwrite_at, self.stack_times, self.author_id, self.text)
 
-class OutcomesRelated(db.Model):
-	__tablename__ = 'outcomes_related'
+class RelatedOutcomesAndSubjectsGroups(db.Model):
+	__tablename__ = 'related_outcomes_and_subjects_group'
 	id = db.Column(db.Integer, primary_key = True)
 	outcomes_id = db.Column(db.Integer, db.ForeignKey('outcomes.id'))
-	subject_related_id = db.Column(db.Integer, db.ForeignKey('subjects.id'))
+	subjects_groups_id = db.Column(db.Integer, db.ForeignKey('subjects_groups.id'))
 
-	def __init__(self, outcomes_id = None, subject_related_id = None):
+	def __init__(self, outcomes_id = None, subjects_groups_id = None):
 		self.outcomes_id = outcomes_id
-		self.subject_related_id = subject_related_id
+		self.subjects_groups_id = subjects_groups_id
 
 	def __repr__(self):
-		return '<Entry id:{} outcomes_id:{} subject_related_id:{}>'.format(self.id, self.outcomes_id, self.subject_related_id)
+		return '<Entry id:{} outcomes_id:{} subjects_groups_id:{}>'.format(self.id, self.outcomes_id, self.subjects_groups_id)
 
-class Author(db.Model):
+class SubjectsGroups(db.Model):
+	__tablename__ = 'subjects_groups'
+	id = db.Column(db.Integer, primary_key = True)
+	group_name = db.Column(db.String(50))
+
+	related_outcomes_and_subjects_groups_id = db.relationship('RelatedOutcomesAndSubjectsGroups', backref = 'subjects_groups', lazy = True)
+	related_subjects = db.relationship('RelatedSubjectsAndGroups', backref = 'subjects_groups', lazy = True)
+
+	def __init__(self, group_name = None):
+		self.group_name = group_name
+
+	def __repr__(self):
+		return '<Entry id:{} name:{}>'.format(self.id, self.group_name)
+
+class Authors(db.Model):
 	__tablename__ = 'authors'
 	id = db.Column(db.Integer, primary_key = True)
 	name = db.Column(db.String(50))
 
-	outcomes = db.relationship('Outcomes', backref = 'author', lazy = True)
+	related_outcomes = db.relationship('Outcomes', backref = 'author', lazy = True)
 
 	def __init__(self, name = None):
 		self.name = name
@@ -53,8 +67,7 @@ class Subjects(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	name = db.Column(db.String(50))
 
-	subjects_related = db.relationship('SubjectsRelated', backref = 'subjects', lazy = True)
-	outcomes_related = db.relationship('OutcomesRelated', backref = 'subjects', lazy = True)
+	related_subjects_and_groups = db.relationship('RelatedSubjectsAndGroups', backref = 'subjects', lazy = True)
 
 	def __init__(self, name = None):
 		self.name = name
@@ -62,15 +75,15 @@ class Subjects(db.Model):
 	def __repr__(self):
 		return '<Entry id:{} name:{}>'.format(self.id, self.name)
 
-class SubjectsRelated(db.Model):
-	__tablename__ = 'subjects_related'
+class RelatedSubjectsAndGroups(db.Model):
+	__tablename__ = 'related_subject_and_groups'
 	id = db.Column(db.Integer, primary_key = True)
-	#subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'))
-	related_id = db.Column(db.Integer, db.ForeignKey('subjects.id'))
+	related_subjects_groups_id = db.Column(db.Integer, db.ForeignKey('subjects_groups.id'))
+	related_subjects_id = db.Column(db.Integer, db.ForeignKey('subjects.id'))
 
-	def __init__(self, subject_id = None, related_id = None):
-		#self.subject_id = subject_id
-		self.related_id = related_id
+	def __init__(self, related_subjects_groups_id = None, related_subjects_id = None):
+		self.related_subjects_groups_id = related_subjects_groups_id
+		self.related_subjects_id = related_subjects_id
 
 	def __repr__(self):
-		return '<Entry id:{} related_id:{}>'.format(self.id, self.related_id)
+		return '<Entry id:{} related_subjects_groups_id:{} related_subjects_id:{}>'.format(self.id, self.related_subjects_groups_id, self.related_subjects_id)

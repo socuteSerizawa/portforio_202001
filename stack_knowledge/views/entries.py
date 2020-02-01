@@ -3,6 +3,8 @@ from flask import Blueprint
 from stack_knowledge import app, db
 from stack_knowledge.models.entries import *
 from stack_knowledge.models.datasets_for_html import Datasets_For_Layout
+from flask_script import Manager
+from sqlalchemy.dialects import mysql
 
 entry = Blueprint('entry', __name__)
 
@@ -13,8 +15,12 @@ dataset_subjects_layout = Datasets_For_Layout()
 @entry.route('/')
 def show_stacks():
 	'''
-	hoge_entry = Author(
+	hoge_entry = Authors(
 		name = 'Taroooo'
+		)
+	db.session.add(hoge_entry)
+	hoge_entry = Authors(
+		name = 'John'
 		)
 	db.session.add(hoge_entry)
 	db.session.commit()
@@ -31,28 +37,59 @@ def show_stacks():
 
 	hoge_entry = Outcomes(
 		overwrite_at = datetime.utcnow(),
-		times  = 1,
+		stack_times  = 1,
 		author_id = 1,
 		text = 'testd'
 		)
 	db.session.add(hoge_entry)
 	db.session.commit()
-
-	hoge_entry = OutcomesRelated(
-		outcomes_id = 1,
-		subject_related_id  = 1,
+	hoge_entry = Outcomes(
+		overwrite_at = datetime.utcnow(),
+		stack_times  = 34,
+		author_id = 2,
+		text = 'testdwefewfw'
 		)
 	db.session.add(hoge_entry)
-	hoge_entry = OutcomesRelated(
+	db.session.commit()
+
+	hoge_entry = RelatedOutcomesAndSubjectsGroups(
 		outcomes_id = 1,
-		subject_related_id  = 2,
+		subjects_groups_id  = 1,
+		)
+	db.session.add(hoge_entry)
+	hoge_entry = RelatedOutcomesAndSubjectsGroups(
+		outcomes_id = 1,
+		subjects_groups_id  = 2,
+		)
+	db.session.add(hoge_entry)
+	db.session.commit()
+	
+	hoge_entry = SubjectsGroups(
+		group_name = 'Python',
+		)
+	db.session.add(hoge_entry)
+	hoge_entry = SubjectsGroups(
+		group_name = 'Math',
+		)
+	db.session.add(hoge_entry)
+	db.session.commit()
+	
+	hoge_entry = RelatedSubjectsAndGroups(
+		related_subjects_groups_id = 1,
+		related_subjects_id  = 1,
+		)
+	db.session.add(hoge_entry)
+	hoge_entry = RelatedSubjectsAndGroups(
+		related_subjects_groups_id = 1,
+		related_subjects_id  = 2,
 		)
 	db.session.add(hoge_entry)
 	db.session.commit()
 	'''
+				
 
 	dataset_outcomes_layout.set_tables('outcomes', Outcomes.query.order_by(Outcomes.id.desc()).all())
-	dataset_outcomes_layout.set_tables('authors' , Author.query.order_by(Author.id.desc()).all())
+	dataset_outcomes_layout.set_tables('authors' , Authors.query.order_by(Authors.id.desc()).all())
 	dataset_outcomes_layout.set_tables('subjects', Subjects.query.order_by(Subjects.id.desc()).all())
 
 	hoge_entry_datas = Outcomes.query.order_by(Outcomes.id.desc()).all()
@@ -65,6 +102,19 @@ def show_stacks():
 
 	# subject = db.session.query(OutcomesRelated, Subjects, Outcomes).join(Outcomes).join(Subjects).all()
 	# db.session.query(OutcomesRelated, Subjects, Outcomes) : outer join
+
+	# subject = db.session.query(OutcomesRelated, Subjects, Outcomes).join(Outcomes).join(Subjects)
+	# varify sql query
+	# print(subject.statement.compile(dialect=mysql.dialect(), compile_kwargs={"literal_binds": True}))
+	'''
+	query = db.session.query(RelatedOutcomesAndSubjectsGroups, SubjectsGroups, Outcomes).join(SubjectsGroups).join(Outcomes)
+	print()
+	print(query.statement.compile(dialect=mysql.dialect(), compile_kwargs={"literal_binds": True}))
+	list0 = query.all()
+	for i in list0:
+		print(i)
+	print()
+	'''
 
 	return render_template('index.html', hoge_entry_datas = hoge_entry_datas, display_dict = dataset_outcomes_layout)
 
