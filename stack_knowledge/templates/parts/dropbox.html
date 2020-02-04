@@ -1,6 +1,6 @@
 <div class="container dropbox">
 	<div class="row">
-		{% for menu_key in display_dict.menu.keys()  %}
+		{% for menu_key in display_dict.menu  %}
 			<div class="col">
 				{% for dropbox_key,values in display_dict.display_dropbox.items() %}
 					{% if menu_key == dropbox_key %}

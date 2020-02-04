@@ -2,15 +2,13 @@ from flask import url_for, render_template, flash, request
 from flask import Blueprint
 from stack_knowledge import app, db
 from stack_knowledge.models.entries import *
-from stack_knowledge.models.datasets_for_html import Datasets_For_Layout
+from stack_knowledge.models.datasets_for_html import Datasets_For_Display
 from flask_script import Manager
 from sqlalchemy.dialects import mysql
 
 entry = Blueprint('entry', __name__)
 
-dataset_outcomes_layout = Datasets_For_Layout()
-dataset_authors_layout  = Datasets_For_Layout()
-dataset_subjects_layout = Datasets_For_Layout()
+layout = Datasets_For_Display()
 
 @entry.route('/')
 def show_stacks():
@@ -88,9 +86,9 @@ def show_stacks():
 	'''
 				
 
-	dataset_outcomes_layout.set_tables('outcomes', Outcomes.query.order_by(Outcomes.id.desc()).all())
-	dataset_outcomes_layout.set_tables('authors' , Authors.query.order_by(Authors.id.desc()).all())
-	dataset_outcomes_layout.set_tables('subjects', Subjects.query.order_by(Subjects.id.desc()).all())
+	layout.set_tables('outcomes', Outcomes.query.order_by(Outcomes.id.desc()).all())
+	layout.set_tables('authors' , Authors.query.order_by(Authors.id.desc()).all())
+	layout.set_tables('subjects', Subjects.query.order_by(Subjects.id.desc()).all())
 
 	hoge_entry_datas = Outcomes.query.order_by(Outcomes.id.desc()).all()
 
@@ -116,12 +114,21 @@ def show_stacks():
 	print()
 	'''
 
-	return render_template('index.html', hoge_entry_datas = hoge_entry_datas, display_dict = dataset_outcomes_layout)
+	return render_template('index.html', hoge_entry_datas = hoge_entry_datas, display_dict = layout)
 
 @entry.route('/entry/outcomes', methods = ['GET'])
 def new_entry():
-	return render_template('entry/outcomes.html', display_dict = dataset_outcomes_layout)
+	# res = request.args.get('get_value')
+	# print(res)
+	return render_template('entry/outcomes.html', display_dict = layout)
 
+@entry.route('/display', methods = ['POST'])
+def select_display():
+	res = request.form['post_value']
+	layout.set_state(res)
+	return render_template('display/'+ res +'.html', display_dict = layout)
+
+'''
 @entry.route('/display/outcomes', methods = ['GET'])
 def display_outcomes():
 	return render_template('display/outcomes.html', display_dict = dataset_outcomes_layout)
@@ -137,8 +144,9 @@ def display_subjects():
 
 	dataset_subjects_layout.set_tables('subjects', Outcomes.query.order_by(Outcomes.id.desc()).all())
 	return render_template('display/subjects.html', display_dict = dataset_subjects_layout)
+'''
 
 @entry.route('/', methods = ['POST'])
 def entry_outcomes():
 
-	return render_template('index.html', hoge_entry_datas = hoge_entry_datas, display_dict = dataset_outcomes_layout)
+	return render_template('index.html', hoge_entry_datas = hoge_entry_datas, display_dict = layout)
