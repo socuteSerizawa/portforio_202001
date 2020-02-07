@@ -1,26 +1,24 @@
-<div class="container dropbox">
-	<div class="row">
-		{% for menu_key in display_dict.menu  %}
-			<div class="col">
-				{% for dropbox_key,values in display_dict.display_dropbox.items() %}
-					{% if menu_key == dropbox_key %}
-						<p>{{ dropbox_key }}</p>
-						<!-- 切替ボタンの設定 -->
-						<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						選択してください
-						</a>
-						<!-- ドロップメニューの設定 -->
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-							{% for value in values %}
-								<a class="dropdown-item" href="#">{{ value }}</a>
-							{% endfor %}
-						</div><!-- /.dropdown-menu -->
+<form action="{{ url_for('entry.select_data')}}" method="POST">
+	<div class="container dropbox">
+		<div class="row">
+			{% for menu_key in display_dict.display_dropbox %}
+				<div class="col">
+					{% if menu_key != None %}
+						<div class="form-group">
+							<label for="select1a">{{ menu_key[0] }}</label>
+							<select id="select1a" class="form-control" name="{{ menu_key[0] }}">
+								<option value ="{{ None }}">選択してください</option>
+								{% for value in menu_key[1] %}
+									<option value="{{  value[0] }}">{{ value[1] }}</option>
+								{% endfor %}
+							</select>
+						</div>
 					{% endif %}
-				{% endfor %}
-		 	</div>
-	 	{% endfor %}
+			 	</div>
+		 	{% endfor %}
+		</div>
 	</div>
-</div>
-
+	<button type="submit" class="btn btn-primary">更新</button>
+</form>
 
 

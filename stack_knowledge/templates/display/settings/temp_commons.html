@@ -7,9 +7,35 @@
 
 {% block body %}
 
-	{% include "parts/dropbox.html" %}
-
 	{% block contents %}{% endblock %}
+
+	<div class="table-responsive">
+		<table class="table table-hover table-sm ">
+			<caption>List of users</caption>
+			<thead>
+				<tr>
+					<th scope="col"></th>
+				{% for menu in display_dict.table_menu %}
+					<th scope="col">{{ menu }}</th>
+				{% endfor%}
+				</tr>
+			</thead>
+			<tbody>
+				{% for data in display_dict.table_date %}
+					<tr>
+						<th scope="row">{{ loop.index }}</th>
+						{% for value in data %}
+						<td>
+							{{ value }}
+						</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
+
+			</tbody>
+		</table>
+	</div>
+
 
   <form action="{{ url_for('entry.new_entry')}}" method="GET">
 	<button type="submit" name="get_value" class="btn btn-primary" value="get_value">データベースを編集</button>

@@ -5,22 +5,22 @@ class Outcomes(db.Model):
 	__tablename__ = 'outcomes'
 	id = db.Column(db.Integer, primary_key = True)
 	created_at = db.Column(db.DateTime)
-	overwrite_at = db.Column(db.DateTime)
+	display_created_at = db.Column(db.String(50))
 	stack_times = db.Column(db.Float)
 	author_id = db.Column(db.Integer, db.ForeignKey('authors.id'))
 	text = db.Column(db.String(50))
 
 	related_outcomes_and_subjects_groups_id = db.relationship('RelatedOutcomesAndSubjectsGroups', backref = 'outcomes', lazy = True)
 
-	def __init__(self, overwrite_at = None, stack_times = None, author_id = None, text = None):
-		self.created_at = datetime.utcnow()
-		self.overwrite_at = overwrite_at
+	def __init__(self, created_at = datetime.utcnow(), stack_times = None, author_id = None, text = None):
+		self.created_at = created_at
+		self.display_created_at = created_at.strftime('%Y-%m-%d %H:%M:%S')
 		self.stack_times = stack_times
 		self.author_id = author_id
 		self.text = text
 
 	def __repr__(self):
-		return '<Entry id:{} created_at:{} overwrite_at:{} stack_times:{} author_id:{} text:{}>'.format(self.id, self.created_at, self.overwrite_at, self.stack_times, self.author_id, self.text)
+		return '<Entry id:{} created_at:{} display_created_at:{} stack_times:{} author_id:{} text:{}>'.format(self.id, self.created_at, self.display_created_at, self.stack_times, self.author_id, self.text)
 
 class RelatedOutcomesAndSubjectsGroups(db.Model):
 	__tablename__ = 'related_outcomes_and_subjects_group'

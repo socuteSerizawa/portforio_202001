@@ -1,30 +1,5 @@
 {% extends "display/settings/temp_commons.html" %}
 {% block contents %}
 
-<div class="table-responsive">
-	<table class="table table-hover table-sm ">
-		<caption>List of users</caption>
-		<thead>
-			<tr>
-			{% for key in hoge_entry_datas[0].__dict__.keys() %}
-				<th scope="col">{{ key }}</th>
-			{% endfor%}
-			</tr>
-		</thead>
-		<tbody>
-			{% for data in hoge_entry_datas %}
-				<tr>
-					<th scope="row">{{ data.id }}</th>
-					{% for value in data.__dict__.values() %}
-					<td>
-						{{ value }}
-					</td>
-					{% endfor %}
-				</tr>
-			{% endfor %}
-
-		</tbody>
-	</table>
-</div>
 
 {% endblock %}

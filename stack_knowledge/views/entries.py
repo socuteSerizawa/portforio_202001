@@ -10,6 +10,9 @@ entry = Blueprint('entry', __name__)
 
 layout = Datasets_For_Display()
 
+table_menu = []
+table_date = []
+
 @entry.route('/')
 def show_stacks():
 	'''
@@ -34,7 +37,6 @@ def show_stacks():
 	db.session.commit()
 
 	hoge_entry = Outcomes(
-		overwrite_at = datetime.utcnow(),
 		stack_times  = 1,
 		author_id = 1,
 		text = 'testd'
@@ -42,7 +44,6 @@ def show_stacks():
 	db.session.add(hoge_entry)
 	db.session.commit()
 	hoge_entry = Outcomes(
-		overwrite_at = datetime.utcnow(),
 		stack_times  = 34,
 		author_id = 2,
 		text = 'testdwefewfw'
@@ -84,14 +85,7 @@ def show_stacks():
 	db.session.add(hoge_entry)
 	db.session.commit()
 	'''
-				
-
-	layout.set_tables('outcomes', Outcomes.query.order_by(Outcomes.id.desc()).all())
-	layout.set_tables('authors' , Authors.query.order_by(Authors.id.desc()).all())
-	layout.set_tables('subjects', Subjects.query.order_by(Subjects.id.desc()).all())
-
-	hoge_entry_datas = Outcomes.query.order_by(Outcomes.id.desc()).all()
-
+	
 	# users = db.session.query(Outcomes, Author).join(Author).all()
 	# users : list
 	# users[0] = (result:'Outcomes', result:'Author') : tupple
@@ -105,16 +99,16 @@ def show_stacks():
 	# varify sql query
 	# print(subject.statement.compile(dialect=mysql.dialect(), compile_kwargs={"literal_binds": True}))
 	'''
-	query = db.session.query(RelatedOutcomesAndSubjectsGroups, SubjectsGroups, Outcomes).join(SubjectsGroups).join(Outcomes)
+	query = db.session.query(Outcomes.overwrite_at, SubjectsGroups.group_name, Outcomes.stack_times, Outcomes.text, RelatedOutcomesAndSubjectsGroups).join(SubjectsGroups).join(Outcomes)
 	print()
 	print(query.statement.compile(dialect=mysql.dialect(), compile_kwargs={"literal_binds": True}))
 	list0 = query.all()
-	for i in list0:
-		print(i)
+	for i in list0[-1]:
+		print(type(i))
 	print()
 	'''
 
-	return render_template('index.html', hoge_entry_datas = hoge_entry_datas, display_dict = layout)
+	return render_template('index.html', display_dict = layout)
 
 @entry.route('/entry/outcomes', methods = ['GET'])
 def new_entry():
@@ -126,25 +120,66 @@ def new_entry():
 def select_display():
 	res = request.form['post_value']
 	layout.set_state(res)
+	list0 = []
+	if layout.layout_state == layout.menu[0]:
+		layout.table_menu = ['更新時間', 'グループ名', '勉強時間', '編集者', '詳細']
+		layout.table_date = db.session.query(Outcomes.display_created_at, SubjectsGroups.group_name, Outcomes.stack_times, Authors.name, Outcomes.text, RelatedOutcomesAndSubjectsGroups).join(SubjectsGroups).join(Outcomes).join(Authors).order_by(Outcomes.display_created_at.desc()).all()
+		layout.table_date = except_last_idx(layout.table_date)
+		list0.append([layout.menu[0], db.session.query(Outcomes.id, Outcomes.display_created_at).order_by(Outcomes.id.asc()).all()])
+		list0.append([layout.menu[1], db.session.query(Authors.id, Authors.name).order_by(Authors.id.asc()).all()])
+		list0.append([layout.menu[2], db.session.query(SubjectsGroups.id, SubjectsGroups.group_name).order_by(SubjectsGroups.id.asc()).all()])
+		list0.append([layout.menu[3], db.session.query(Subjects.id, Subjects.name).order_by(Subjects.id.asc()).all()])
+
+	elif layout.layout_state == layout.menu[1]:
+		layout.table_menu = ['編集者']
+		layout.table_date = db.session.query(Authors.name).order_by(Authors.id.desc()).all()
+
+	elif layout.layout_state == layout.menu[2]:
+		layout.table_menu = ['グループ名', '登録科目']
+		layout.table_date = db.session.query(SubjectsGroups.group_name, Subjects.name, RelatedSubjectsAndGroups).join(SubjectsGroups).join(Subjects).order_by(Subjects.id.desc()).all()
+		layout.table_date = except_last_idx(layout.table_date)
+		list0.append([layout.menu[2], db.session.query(SubjectsGroups.id, SubjectsGroups.group_name).order_by(SubjectsGroups.id.asc()).all()])
+		list0.append([layout.menu[3], db.session.query(Subjects.id, Subjects.name).order_by(Subjects.id.asc()).all()])
+		
+	elif layout.layout_state == layout.menu[3]:
+		layout.table_menu = ['登録科目']
+		layout.table_date = db.session.query(Subjects.name).order_by(Subjects.id.desc()).all()
+
+	layout.set_tables(list0)
+
 	return render_template('display/'+ res +'.html', display_dict = layout)
 
-'''
-@entry.route('/display/outcomes', methods = ['GET'])
-def display_outcomes():
-	return render_template('display/outcomes.html', display_dict = dataset_outcomes_layout)
+def except_last_idx(target_list):
+	for idx in range(len(target_list)):
+		target_list[idx] = target_list[idx][:-1]
+	return target_list
 
-@entry.route('/display/authors', methods = ['GET'])
-def display_authors():
+@entry.route('/display/detail/', methods = ['POST'])
+def select_data():
+	res = request.form
 
-	dataset_authors_layout.set_tables('authors', Outcomes.query.order_by(Outcomes.id.desc()).all())
-	return render_template('display/authors.html', display_dict = dataset_authors_layout)
+	if layout.layout_state == layout.menu[0]:
+		query = db.session.query(Outcomes.display_created_at, SubjectsGroups.group_name, Outcomes.stack_times, Authors.name, Outcomes.text, RelatedOutcomesAndSubjectsGroups).join(SubjectsGroups).join(Outcomes).join(Authors).order_by(Outcomes.display_created_at.desc())
+		if res[layout.menu[0]] != 'None':
+			query = query.filter(Outcomes.id == int(res[layout.menu[0]]))
+		if res[layout.menu[1]] != 'None':
+			query = query.filter(Authors.id == int(res[layout.menu[1]]))
+		if res[layout.menu[2]] != 'None':
+			query = query.filter(SubjectsGroups.id == int(res[layout.menu[2]]))
+		if res[layout.menu[3]] != 'None':
+			query = query.filter(Subjects.id == int(res[layout.menu[3]]))
+		layout.table_date = query.all()
+		layout.table_date = except_last_idx(layout.table_date)
+	if layout.layout_state == layout.menu[2]:
+		query = db.session.query(SubjectsGroups.group_name, Subjects.name, RelatedSubjectsAndGroups).join(SubjectsGroups).join(Subjects).order_by(Subjects.id.desc())
+		if res[layout.menu[2]] != 'None':
+			query = query.filter(SubjectsGroups.id == int(res[layout.menu[2]]))
+		if res[layout.menu[3]] != 'None':
+			query = query.filter(Subjects.id == int(res[layout.menu[3]]))
+		layout.table_date = query.all()
+		layout.table_date = except_last_idx(layout.table_date)
 
-@entry.route('/display/subjects', methods = ['GET'])
-def display_subjects():
-
-	dataset_subjects_layout.set_tables('subjects', Outcomes.query.order_by(Outcomes.id.desc()).all())
-	return render_template('display/subjects.html', display_dict = dataset_subjects_layout)
-'''
+	return render_template('display/'+ layout.layout_state +'.html', display_dict = layout)
 
 @entry.route('/', methods = ['POST'])
 def entry_outcomes():
