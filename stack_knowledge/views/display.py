@@ -3,22 +3,17 @@ from flask import Blueprint
 from stack_knowledge import app, db
 from stack_knowledge.models.entries import *
 from stack_knowledge.models.datasets_for_html import Datasets_For_Display
-from stack_knowledge.models.dropboxs import DropboxParts
-
-# from flask_script import Manager
-# from sqlalchemy.dialects import mysql
 
 entry = Blueprint('entry', __name__)
 
 layout = Datasets_For_Display()
-'''
-@entry.route('/entry', methods = ['POST'])
-def new_entry():
-	# res = request.args.get('get_value')
-	# print(res)
-	return render_template('entry/outcomes.html', display_dict = layout)
-'''
 
+def except_last_idx(target_list):
+	for idx in range(len(target_list)):
+		target_list[idx] = target_list[idx][:-1]
+	return target_list
+
+# indexページへ移行
 @entry.route('/')
 def show_stacks():
 	'''
@@ -103,6 +98,8 @@ def show_stacks():
 
 	# subject = db.session.query(OutcomesRelated, Subjects, Outcomes).join(Outcomes).join(Subjects)
 	# varify sql query
+	# from flask_script import Manager
+	# from sqlalchemy.dialects import mysql
 	# print(subject.statement.compile(dialect=mysql.dialect(), compile_kwargs={"literal_binds": True}))
 	'''
 	query = db.session.query(Outcomes.overwrite_at, SubjectsGroups.group_name, Outcomes.stack_times, Outcomes.text, RelatedOutcomesAndSubjectsGroups).join(SubjectsGroups).join(Outcomes)
@@ -114,7 +111,6 @@ def show_stacks():
 	print()
 	'''
 
-	
 	table_menu = ['更新時間', 'グループ名', '勉強時間', '編集者', '詳細']
 	list0 = []
 	list0.append([layout.menu[0], db.session.query(Outcomes.id, Outcomes.display_created_at).order_by(Outcomes.id.asc()).all()])
@@ -141,16 +137,9 @@ def show_stacks():
 	layout.table_date = db.session.query(Outcomes.display_created_at, SubjectsGroups.group_name, Outcomes.stack_times, Authors.name, Outcomes.text, RelatedOutcomesAndSubjectsGroups).join(SubjectsGroups).join(Outcomes).join(Authors).order_by(Outcomes.display_created_at.desc()).all()
 	layout.table_date = except_last_idx(layout.table_date)
 
-
 	return render_template('index.html', display_dict = layout)
-	
-@entry.route('/entry', methods = ['POST'])
-def select_entry():
-	res = request.form['post_value']
-	layout.set_state(res)
 
-	return render_template('entry/create/'+ res +'.html', display_dict = layout)
-
+# Read用ページへ移行
 @entry.route('/display', methods = ['POST'])
 def select_display():
 	res = request.form['post_value']
@@ -171,11 +160,7 @@ def select_display():
 
 	return render_template('display/'+ res +'.html', display_dict = layout)
 
-def except_last_idx(target_list):
-	for idx in range(len(target_list)):
-		target_list[idx] = target_list[idx][:-1]
-	return target_list
-
+# Datatableの取得
 @entry.route('/display/detail/', methods = ['POST'])
 def select_data():
 	res = request.form
@@ -204,10 +189,5 @@ def select_data():
 	return render_template('display/'+ layout.layout_state +'.html', display_dict = layout)
 
 
-@entry.route('/', methods = ['POST'])
-def entry_outcomes():
-	print("1gibara")
 
-	# return render_template('index.html', display_dict = layout)
-	return redirect(url_for('entry.show_stacks')) 
 

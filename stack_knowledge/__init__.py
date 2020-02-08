@@ -10,4 +10,4 @@ from stack_knowledge.views.display import entry
 
 app.register_blueprint(entry, url_prefix = '/')
 
-from stack_knowledge.views import display
+from stack_knowledge.views import display, entry
