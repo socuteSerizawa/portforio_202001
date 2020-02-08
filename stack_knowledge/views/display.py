@@ -6,6 +6,7 @@ from stack_knowledge.models.datasets_for_html import Datasets_For_Display
 
 entry = Blueprint('entry', __name__)
 
+# レイアウトの状態を保存
 layout = Datasets_For_Display()
 
 def except_last_idx(target_list):
@@ -17,25 +18,6 @@ def except_last_idx(target_list):
 @entry.route('/')
 def show_stacks():
 	'''
-	hoge_entry = Authors(
-		name = 'Taroooo'
-		)
-	db.session.add(hoge_entry)
-	hoge_entry = Authors(
-		name = 'John'
-		)
-	db.session.add(hoge_entry)
-	db.session.commit()
-
-	hoge_entry = Subjects(
-		name = 'math'
-		)
-	db.session.add(hoge_entry)
-	hoge_entry = Subjects(
-		name = 'science'
-		)
-	db.session.add(hoge_entry)
-	db.session.commit()
 
 	hoge_entry = Outcomes(
 		stack_times  = 1,
@@ -110,7 +92,7 @@ def show_stacks():
 		print(type(i))
 	print()
 	'''
-
+	# ディクショナリに「表の項目名」，「ドロップボックス情報」を追加
 	table_menu = ['更新時間', 'グループ名', '勉強時間', '編集者', '詳細']
 	list0 = []
 	list0.append([layout.menu[0], db.session.query(Outcomes.id, Outcomes.display_created_at).order_by(Outcomes.id.asc()).all()])
@@ -133,7 +115,10 @@ def show_stacks():
 	list0 = []
 	layout.set_parts(layout.menu[3], table_menu, list0)
 
+	# indexページに移行した場合，ディクショナリ[0]を呼び出す
 	layout.set_state(layout.menu[0])
+
+	# 表の情報を取得
 	layout.table_date = db.session.query(Outcomes.display_created_at, SubjectsGroups.group_name, Outcomes.stack_times, Authors.name, Outcomes.text, RelatedOutcomesAndSubjectsGroups).join(SubjectsGroups).join(Outcomes).join(Authors).order_by(Outcomes.display_created_at.desc()).all()
 	layout.table_date = except_last_idx(layout.table_date)
 
@@ -144,6 +129,8 @@ def show_stacks():
 def select_display():
 	res = request.form['post_value']
 	layout.set_state(res)
+
+	# 状態から，ディクショナリと表の情報を呼び出す
 	if   layout.layout_state == layout.menu[0]:
 		layout.table_date = db.session.query(Outcomes.display_created_at, SubjectsGroups.group_name, Outcomes.stack_times, Authors.name, Outcomes.text, RelatedOutcomesAndSubjectsGroups).join(SubjectsGroups).join(Outcomes).join(Authors).order_by(Outcomes.display_created_at.desc()).all()
 		layout.table_date = except_last_idx(layout.table_date)
@@ -165,6 +152,7 @@ def select_display():
 def select_data():
 	res = request.form
 
+	# ドロップボックスから選択されたidの情報を呼び出す
 	if layout.layout_state == layout.menu[0]:
 		query = db.session.query(Outcomes.display_created_at, SubjectsGroups.group_name, Outcomes.stack_times, Authors.name, Outcomes.text, RelatedOutcomesAndSubjectsGroups).join(SubjectsGroups).join(Outcomes).join(Authors).order_by(Outcomes.display_created_at.desc())
 		if res[layout.menu[0]] != 'None':
@@ -187,7 +175,3 @@ def select_data():
 		layout.table_date = except_last_idx(layout.table_date)
 
 	return render_template('display/'+ layout.layout_state +'.html', display_dict = layout)
-
-
-
-
