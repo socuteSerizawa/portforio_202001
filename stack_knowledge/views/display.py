@@ -133,7 +133,7 @@ def show_stacks():
 	list0 = []
 	layout.set_parts(layout.menu[3], table_menu, list0)
 
-
+	layout.set_state(layout.menu[0])
 	layout.table_date = db.session.query(Outcomes.display_created_at, SubjectsGroups.group_name, Outcomes.stack_times, Authors.name, Outcomes.text, RelatedOutcomesAndSubjectsGroups).join(SubjectsGroups).join(Outcomes).join(Authors).order_by(Outcomes.display_created_at.desc()).all()
 	layout.table_date = except_last_idx(layout.table_date)
 
