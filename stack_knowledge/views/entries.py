@@ -3,15 +3,21 @@ from flask import Blueprint
 from stack_knowledge import app, db
 from stack_knowledge.models.entries import *
 from stack_knowledge.models.datasets_for_html import Datasets_For_Display
-from flask_script import Manager
-from sqlalchemy.dialects import mysql
+from stack_knowledge.models.dropboxs import DropboxParts
+
+# from flask_script import Manager
+# from sqlalchemy.dialects import mysql
 
 entry = Blueprint('entry', __name__)
 
 layout = Datasets_For_Display()
-
-table_menu = []
-table_date = []
+'''
+@entry.route('/entry', methods = ['POST'])
+def new_entry():
+	# res = request.args.get('get_value')
+	# print(res)
+	return render_template('entry/outcomes.html', display_dict = layout)
+'''
 
 @entry.route('/')
 def show_stacks():
@@ -108,44 +114,54 @@ def show_stacks():
 	print()
 	'''
 
-	return render_template('index.html', display_dict = layout)
+	
+	table_menu = ['更新時間', 'グループ名', '勉強時間', '編集者', '詳細']
+	list0 = []
+	list0.append([layout.menu[0], db.session.query(Outcomes.id, Outcomes.display_created_at).order_by(Outcomes.id.asc()).all()])
+	list0.append([layout.menu[1], db.session.query(Authors.id, Authors.name).order_by(Authors.id.asc()).all()])
+	list0.append([layout.menu[2], db.session.query(SubjectsGroups.id, SubjectsGroups.group_name).order_by(SubjectsGroups.id.asc()).all()])
+	list0.append([layout.menu[3], db.session.query(Subjects.id, Subjects.name).order_by(Subjects.id.asc()).all()])
+	layout.set_parts(layout.menu[0], table_menu, list0)
 
-@entry.route('/entry/outcomes', methods = ['GET'])
-def new_entry():
-	# res = request.args.get('get_value')
-	# print(res)
-	return render_template('entry/outcomes.html', display_dict = layout)
+	table_menu = ['編集者']
+	list0 = []
+	layout.set_parts(layout.menu[1], table_menu, list0)
+
+	table_menu = ['グループ名', '登録科目']
+	list0 = []
+	list0.append([layout.menu[2], db.session.query(SubjectsGroups.id, SubjectsGroups.group_name).order_by(SubjectsGroups.id.asc()).all()])
+	list0.append([layout.menu[3], db.session.query(Subjects.id, Subjects.name).order_by(Subjects.id.asc()).all()])
+	layout.set_parts(layout.menu[2], table_menu, list0)
+
+	table_menu = ['登録科目']
+	list0 = []
+	layout.set_parts(layout.menu[3], table_menu, list0)
+
+	return render_template('index.html', display_dict = layout)
+@entry.route('/entry', methods = ['POST'])
+def select_entry():
+	res = request.form['post_value']
+	layout.set_state(res)
+
+	return render_template('entry/create/'+ res +'.html', display_dict = layout)
 
 @entry.route('/display', methods = ['POST'])
 def select_display():
 	res = request.form['post_value']
 	layout.set_state(res)
-	list0 = []
-	if layout.layout_state == layout.menu[0]:
-		layout.table_menu = ['更新時間', 'グループ名', '勉強時間', '編集者', '詳細']
+	if   layout.layout_state == layout.menu[0]:
 		layout.table_date = db.session.query(Outcomes.display_created_at, SubjectsGroups.group_name, Outcomes.stack_times, Authors.name, Outcomes.text, RelatedOutcomesAndSubjectsGroups).join(SubjectsGroups).join(Outcomes).join(Authors).order_by(Outcomes.display_created_at.desc()).all()
 		layout.table_date = except_last_idx(layout.table_date)
-		list0.append([layout.menu[0], db.session.query(Outcomes.id, Outcomes.display_created_at).order_by(Outcomes.id.asc()).all()])
-		list0.append([layout.menu[1], db.session.query(Authors.id, Authors.name).order_by(Authors.id.asc()).all()])
-		list0.append([layout.menu[2], db.session.query(SubjectsGroups.id, SubjectsGroups.group_name).order_by(SubjectsGroups.id.asc()).all()])
-		list0.append([layout.menu[3], db.session.query(Subjects.id, Subjects.name).order_by(Subjects.id.asc()).all()])
 
 	elif layout.layout_state == layout.menu[1]:
-		layout.table_menu = ['編集者']
 		layout.table_date = db.session.query(Authors.name).order_by(Authors.id.desc()).all()
 
 	elif layout.layout_state == layout.menu[2]:
-		layout.table_menu = ['グループ名', '登録科目']
 		layout.table_date = db.session.query(SubjectsGroups.group_name, Subjects.name, RelatedSubjectsAndGroups).join(SubjectsGroups).join(Subjects).order_by(Subjects.id.desc()).all()
 		layout.table_date = except_last_idx(layout.table_date)
-		list0.append([layout.menu[2], db.session.query(SubjectsGroups.id, SubjectsGroups.group_name).order_by(SubjectsGroups.id.asc()).all()])
-		list0.append([layout.menu[3], db.session.query(Subjects.id, Subjects.name).order_by(Subjects.id.asc()).all()])
 		
 	elif layout.layout_state == layout.menu[3]:
-		layout.table_menu = ['登録科目']
 		layout.table_date = db.session.query(Subjects.name).order_by(Subjects.id.desc()).all()
-
-	layout.set_tables(list0)
 
 	return render_template('display/'+ res +'.html', display_dict = layout)
 

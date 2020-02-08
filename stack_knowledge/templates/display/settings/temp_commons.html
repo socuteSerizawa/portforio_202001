@@ -1,7 +1,9 @@
 {% extends "display/settings/layout.html" %}
 
 {% block menu %}
-	{% include "parts/menu.html" %}
+	{% with name = "entry.select_display" %} 
+		{% include "parts/menu.html" %}
+	{% endwith %}
 {% endblock %}
 
 
@@ -37,8 +39,8 @@
 	</div>
 
 
-  <form action="{{ url_for('entry.new_entry')}}" method="GET">
-	<button type="submit" name="get_value" class="btn btn-primary" value="get_value">データベースを編集</button>
-</form>
+	<form action="{{ url_for('entry.select_entry')}}" method="POST">
+		<button type="submit" name="post_value" class="btn btn-primary" value="{{ display_dict.layout_state }}">データベースを編集</button>
+	</form>
 
 {% endblock %}

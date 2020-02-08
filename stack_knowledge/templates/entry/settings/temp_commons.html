@@ -1,12 +1,12 @@
 {% extends "entry/settings/layout.html" %}
 
 {% block menu %}
-	{% include "parts/menu.html" %}
+	{% with name = "entry.select_entry" %} 
+		{% include "parts/menu.html" %}
+	{% endwith %}
 {% endblock %}
 
 
 {% block body %}
-
-  {% block contents %}{% endblock %}
 
 {% endblock %}

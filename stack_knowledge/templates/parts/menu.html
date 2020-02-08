@@ -1,6 +1,6 @@
 <div class="list-group" style="max-width: 400px;">
 	{% for content in display_dict.menu %}
-	<form action="{{ url_for('entry.select_display')}}" method="POST">
+	<form action="{{ url_for(name)}}" method="POST">
 		<button type="submit" name="post_value" class="btn btn-primary" value="{{ content }}">{{ content }}</button>
 	</form>
 	{% endfor %}
