@@ -1,4 +1,4 @@
-from flask import url_for, render_template, flash, request
+from flask import url_for, render_template, flash, request, redirect
 from flask import Blueprint
 from stack_knowledge import app, db
 from stack_knowledge.models.entries import *
@@ -203,9 +203,11 @@ def select_data():
 
 	return render_template('display/'+ layout.layout_state +'.html', display_dict = layout)
 
-'''
+
 @entry.route('/', methods = ['POST'])
 def entry_outcomes():
+	print("1gibara")
 
-	return render_template('index.html', hoge_entry_datas = hoge_entry_datas, display_dict = layout)
-'''
+	# return render_template('index.html', display_dict = layout)
+	return redirect(url_for('entry.show_stacks')) 
+

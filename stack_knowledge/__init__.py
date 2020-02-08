@@ -6,8 +6,8 @@ app.config.from_pyfile('development.cfg')
 
 db = SQLAlchemy(app)
 
-from stack_knowledge.views.entries import entry
+from stack_knowledge.views.display import entry
 
 app.register_blueprint(entry, url_prefix = '/')
 
-from stack_knowledge.views import entries
+from stack_knowledge.views import display
