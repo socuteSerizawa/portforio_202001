@@ -203,7 +203,9 @@ def select_data():
 
 	return render_template('display/'+ layout.layout_state +'.html', display_dict = layout)
 
+'''
 @entry.route('/', methods = ['POST'])
 def entry_outcomes():
 
 	return render_template('index.html', hoge_entry_datas = hoge_entry_datas, display_dict = layout)
+'''
