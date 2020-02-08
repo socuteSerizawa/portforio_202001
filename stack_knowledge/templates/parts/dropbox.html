@@ -4,15 +4,9 @@
 			{% for menu_key in display_dict.display_dropbox %}
 				<div class="col">
 					{% if menu_key != None %}
-						<div class="form-group">
-							<label for="select1a">{{ menu_key[0] }}</label>
-							<select id="select1a" class="form-control" name="{{ menu_key[0] }}">
-								<option value ="{{ None }}">選択してください</option>
-								{% for value in menu_key[1] %}
-									<option value="{{  value[0] }}">{{ value[1] }}</option>
-								{% endfor %}
-							</select>
-						</div>
+						{% with box_name = menu_key[0], droplist = menu_key[1] %} 
+							{% include "parts/dropbox_details.html" %}
+						{% endwith %}
 					{% endif %}
 			 	</div>
 		 	{% endfor %}

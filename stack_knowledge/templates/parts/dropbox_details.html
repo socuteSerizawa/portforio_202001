@@ -1,0 +1,9 @@
+<div class="form-group">
+	<label>{{ box_name }}</label>
+	<select class="form-control" name="{{ box_name }}">
+		<option value ="{{ None }}">選択してください</option>
+		{% for value in droplist %}
+			<option value="{{  value[0] }}">{{ value[1] }}</option>
+		{% endfor %}
+	</select>
+</div>
