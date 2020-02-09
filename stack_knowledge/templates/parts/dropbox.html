@@ -4,7 +4,14 @@
 			{% for menu_key in display_dict.display_dropbox %}
 				<div class="col">
 					{% if menu_key != None %}
-						{% with box_name = menu_key[0], droplist = menu_key[1], selected_id = "None" %} 
+						<!-- 選択した項目を取得する -->
+						{% if selectd_dropbox|string == '' %}
+							{% set selected_id = 'None' %}
+						{% else %}
+							{% set selected_id = selectd_dropbox[menu_key[0]] %}
+						{% endif %}
+						<!-- ドロップボックスの作成 -->
+						{% with box_name = menu_key[0], droplist = menu_key[1], selected_id = selected_id %} 
 							{% include "parts/dropbox_details.html" %}
 						{% endwith %}
 					{% endif %}
