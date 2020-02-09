@@ -19,21 +19,6 @@ def except_last_idx(target_list):
 def show_stacks():
 	'''
 
-	hoge_entry = Outcomes(
-		stack_times  = 1,
-		author_id = 1,
-		text = 'testd'
-		)
-	db.session.add(hoge_entry)
-	db.session.commit()
-	hoge_entry = Outcomes(
-		stack_times  = 34,
-		author_id = 2,
-		text = 'testdwefewfw'
-		)
-	db.session.add(hoge_entry)
-	db.session.commit()
-
 	hoge_entry = RelatedOutcomesAndSubjectsGroups(
 		outcomes_id = 1,
 		subjects_groups_id  = 1,
@@ -42,16 +27,6 @@ def show_stacks():
 	hoge_entry = RelatedOutcomesAndSubjectsGroups(
 		outcomes_id = 1,
 		subjects_groups_id  = 2,
-		)
-	db.session.add(hoge_entry)
-	db.session.commit()
-	
-	hoge_entry = SubjectsGroups(
-		group_name = 'Python',
-		)
-	db.session.add(hoge_entry)
-	hoge_entry = SubjectsGroups(
-		group_name = 'Math',
 		)
 	db.session.add(hoge_entry)
 	db.session.commit()
