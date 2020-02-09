@@ -4,7 +4,7 @@
 			{% for menu_key in display_dict.display_dropbox %}
 				<div class="col">
 					{% if menu_key != None %}
-						{% with box_name = menu_key[0], droplist = menu_key[1] %} 
+						{% with box_name = menu_key[0], droplist = menu_key[1], selected_id = "None" %} 
 							{% include "parts/dropbox_details.html" %}
 						{% endwith %}
 					{% endif %}

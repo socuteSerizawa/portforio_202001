@@ -7,12 +7,12 @@
 		<input type="text" name="OutcomeTime" class="form-control" id="InputOutcomeTime" >
 	</div>
 
-	{% with box_name = display_dict.table_menu[0], droplist = display_dict.display_dropbox[0][1] %} 
+	{% with box_name = display_dict.table_menu[0], droplist = display_dict.display_dropbox[0][1], selected_id = "None" %} 
 		{% include "parts/dropbox_details.html" %}
 	{% endwith %}
 
 	{% for i in range(1, 3 + 1)%}
-		{% with box_name = display_dict.table_menu[1] + '_' + i|string , droplist = display_dict.display_dropbox[1][1] %} 
+		{% with box_name = display_dict.table_menu[1] + '_' + i|string , droplist = display_dict.display_dropbox[1][1], selected_id = "None" %} 
 			{% include "parts/dropbox_details.html" %}
 		{% endwith %}
 	{% endfor %}
