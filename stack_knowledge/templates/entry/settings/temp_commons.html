@@ -6,7 +6,17 @@
 	{% endwith %}
 {% endblock %}
 
-
 {% block body %}
+<ul class="nav nav-tabs nav-justified" id="myTab">
+  <li class="nav-item"><a href="#" class="nav-link active" data-toggle="tab">新規登録</a></li>
+  <li class="nav-item"><a href="#" class="nav-link" data-toggle="tab">修正</a></li>
+  <li class="nav-item"><a href="#" class="nav-link" data-toggle="tab">削除</a></li>
+</ul>
+<script>$('#myTab li:nth-child(2) a').tab('show')</script>
 
+
+{% block body_detail %}
+
+
+{% endblock %}
 {% endblock %}
