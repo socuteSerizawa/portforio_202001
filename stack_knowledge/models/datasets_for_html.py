@@ -22,6 +22,8 @@ class Datasets_For_Display(Datasets_For_Layout):
 
 		self.table_date = []
 
+		self.cud_state = 0
+
 	def set_parts(self, name, table_menu, display_dropbox):
 		self.dropbox_parts[name] = DropboxParts(table_menu, self.organize_tables(display_dropbox))
 
@@ -35,4 +37,12 @@ class Datasets_For_Display(Datasets_For_Layout):
 		res = self.dropbox_parts[self.layout_state]
 		self.table_menu = res.table_menu
 		self.display_dropbox = res.display_dropbox
+
+	def set_cud_state(self, cud_state):
+		if cud_state == 'create':
+			self.cud_state = 1
+		elif cud_state == 'update':
+			self.cud_state = 2
+		elif cud_state == 'delete':
+			self.cud_state = 3
 

@@ -21,8 +21,17 @@ def select_entry():
 
 	res = request.form['post_value']
 	layout.set_state(res)
-		
+	layout.set_cud_state('create')
+			
 	return render_template('entry/create/'+ res +'.html', display_dict = layout)
+
+# Update or Delete用メニューへ移行
+@app.route('/entry/change', methods = ['POST'])
+def select_entry2():
+	res = request.form['post_value']
+	layout.set_cud_state(res)
+
+	return render_template('entry/'+ res + '/' + layout.layout_state + '.html', display_dict = layout)
 
 # indexページへ移行
 @app.route('/', methods = ['POST'])

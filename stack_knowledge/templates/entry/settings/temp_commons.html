@@ -8,15 +8,29 @@
 
 {% block body %}
 <ul class="nav nav-tabs nav-justified" id="myTab">
-  <li class="nav-item"><a href="#" class="nav-link active" data-toggle="tab">新規登録</a></li>
-  <li class="nav-item"><a href="#" class="nav-link" data-toggle="tab">修正</a></li>
-  <li class="nav-item"><a href="#" class="nav-link" data-toggle="tab">削除</a></li>
+	<li class="nav-item">
+		<form action="{{ url_for('select_entry')}}" method="POST" name="form1">
+			<input type="hidden" name="post_value" value="{{ display_dict.layout_state }}">
+			<a href="javascript:form1.submit()" class="nav-link">新規登録</a>
+		</form>
+	</li>
+	<li class="nav-item">
+		<form action="{{ url_for('select_entry2')}}" method="POST" name="form2">
+			<input type="hidden" name="post_value" value="update">
+			<a href="javascript:form2.submit()" class="nav-link">修正</a>
+		</form>
+	</li>
+	<li class="nav-item">
+		<form action="{{ url_for('select_entry2')}}" method="POST" name="form3">
+			<input type="hidden" name="post_value" value="delete">
+			<a href="javascript:form3.submit()" class="nav-link">削除</a>
+		</form>
+	</li>
 </ul>
-<script>$('#myTab li:nth-child(2) a').tab('show')</script>
+<script>$('#myTab li:nth-child({{ display_dict.cud_state }}) a').tab('show')</script>
 
 
 {% block body_detail %}
-
 
 {% endblock %}
 {% endblock %}
