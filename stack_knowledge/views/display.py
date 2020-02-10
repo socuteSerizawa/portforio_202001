@@ -18,32 +18,6 @@ def except_last_idx(target_list):
 @entry.route('/')
 def show_stacks():
 	'''
-
-	hoge_entry = RelatedOutcomesAndSubjectsGroups(
-		outcomes_id = 1,
-		subjects_groups_id  = 1,
-		)
-	db.session.add(hoge_entry)
-	hoge_entry = RelatedOutcomesAndSubjectsGroups(
-		outcomes_id = 1,
-		subjects_groups_id  = 2,
-		)
-	db.session.add(hoge_entry)
-	db.session.commit()
-	
-	hoge_entry = RelatedSubjectsAndGroups(
-		related_subjects_groups_id = 1,
-		related_subjects_id  = 1,
-		)
-	db.session.add(hoge_entry)
-	hoge_entry = RelatedSubjectsAndGroups(
-		related_subjects_groups_id = 1,
-		related_subjects_id  = 2,
-		)
-	db.session.add(hoge_entry)
-	db.session.commit()
-	'''
-	
 	# users = db.session.query(Outcomes, Author).join(Author).all()
 	# users : list
 	# users[0] = (result:'Outcomes', result:'Author') : tupple
@@ -58,7 +32,7 @@ def show_stacks():
 	# from flask_script import Manager
 	# from sqlalchemy.dialects import mysql
 	# print(subject.statement.compile(dialect=mysql.dialect(), compile_kwargs={"literal_binds": True}))
-	'''
+
 	query = db.session.query(Outcomes.overwrite_at, SubjectsGroups.group_name, Outcomes.stack_times, Outcomes.text, RelatedOutcomesAndSubjectsGroups).join(SubjectsGroups).join(Outcomes)
 	print()
 	print(query.statement.compile(dialect=mysql.dialect(), compile_kwargs={"literal_binds": True}))
@@ -149,4 +123,4 @@ def select_data():
 		layout.table_date = query.all()
 		layout.table_date = except_last_idx(layout.table_date)
 
-	return render_template('display/'+ layout.layout_state +'.html', display_dict = layout)
+	return render_template('display/'+ layout.layout_state +'.html', selectd_dropbox = res, display_dict = layout)
