@@ -52,6 +52,7 @@ def show_stacks():
 
 	table_menu = ['編集者']
 	list0 = []
+	list0.append([layout.menu[1], db.session.query(Authors.id, Authors.name).order_by(Authors.id.asc()).all()])
 	layout.set_parts(layout.menu[1], table_menu, list0)
 
 	table_menu = ['グループ名', '登録科目']
@@ -62,6 +63,7 @@ def show_stacks():
 
 	table_menu = ['登録科目']
 	list0 = []
+	list0.append([layout.menu[3], db.session.query(Subjects.id, Subjects.name).order_by(Subjects.id.asc()).all()])
 	layout.set_parts(layout.menu[3], table_menu, list0)
 
 	# indexページに移行した場合，ディクショナリ[0]を呼び出す

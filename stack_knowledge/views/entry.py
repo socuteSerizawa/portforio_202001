@@ -7,18 +7,6 @@ from stack_knowledge.views.display import layout
 @app.route('/entry', methods = ['POST'])
 def select_entry():
 
-	# ディクショナリに「表の項目名」，「ドロップボックス情報」を収納
-	table_menu = ['Authors', 'SubjectsGroups'] # Only Englsh!!!
-	list0 = []
-	list0.append([layout.menu[1], db.session.query(Authors.id, Authors.name).order_by(Authors.id.asc()).all()])
-	list0.append([layout.menu[2], db.session.query(SubjectsGroups.id, SubjectsGroups.group_name).order_by(SubjectsGroups.id.asc()).all()])
-	layout.set_parts(layout.menu[0], table_menu, list0)
-
-	table_menu = ['subject'] # Only Englsh!!!
-	list0 = []
-	list0.append([layout.menu[3], db.session.query(Subjects.id, Subjects.name).order_by(Subjects.id.asc()).all()])
-	layout.set_parts(layout.menu[2], table_menu, list0)
-
 	res = request.form['post_value']
 	layout.set_state(res)
 	layout.set_cud_state('create')
