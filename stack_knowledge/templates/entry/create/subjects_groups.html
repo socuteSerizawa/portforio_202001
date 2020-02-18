@@ -1,5 +1,16 @@
 {% extends "entry/create/temp_create.html" %}
 
 {% block contents %}
-{% include "parts/subjects_groups.html" %}
+<form action="{{ url_for('entry_outcomes')}}" method=post class=entry_outcomes>
+	<div class="form-group">
+		<label for="InputSubjectGroup">グループ名</label>
+		<input type="text" name="Subject_Group_name" class="form-control" id="InputSubjectGroup" >
+	</div>
+	{% for i in range(1, 3 + 1)%}
+		{% with box_name = display_dict.table_menu[0] + '_' + i|string , droplist = display_dict.display_dropbox[0][1], selected_id = "None" %} 
+			{% include "parts/dropbox_details.html" %}
+		{% endwith %}
+	{% endfor %}
+	<button type="submit" class="btn btn-primary">データベースに追加</button>
+</form>
 {% endblock %}
