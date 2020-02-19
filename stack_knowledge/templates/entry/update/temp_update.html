@@ -1,8 +1,10 @@
-{% extends "entry/settings/temp_commons.html" %}
-{% block body_detail %}
-<form action="{{ url_for('entry_outcomes')}}" method=post class=entry_outcomes>
+{% extends "entry/settings/update_and_delete.html" %}
+
+{% block read_id %}
+
+<form action="{{ url_for('update_entry', id = entry.id)}}" method=post class=update_entry>
 	{% block contents %}
 	{% endblock %}
-	<button type="submit" class="btn btn-primary">データベースを更新</button>
+	<button type="submit" class="btn btn-primary">上書き</button>
 </form>
 {% endblock %}

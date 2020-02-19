@@ -1,0 +1,24 @@
+{% extends "entry/settings/temp_commons.html" %}
+{% block body_detail %}
+<form action="{{ url_for('read_entry')}}" method=post class=read_entry>
+	<div class="form-group">
+		<label>{{ display_dict.display_dropbox[0][0] }}</label>
+		<select class="form-control" id ="select_read" name="select_read">
+			<option value ="{{ None }}">選択してください</option>
+			{% for value in display_dict.display_dropbox[0][1] %}
+				<option value="{{  value[0] }}">{{ value[1] }}</option>
+			{% endfor %}
+		</select>
+		<script>
+			document.getElementById("{{ box_name }}").value = " None ";
+		</script>
+	</div>
+
+
+	<button type="submit" class="btn btn-primary">読み出し</button>
+</form>
+
+{% block read_id %}
+{% endblock %}
+{% endblock %}
+

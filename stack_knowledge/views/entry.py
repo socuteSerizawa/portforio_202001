@@ -13,13 +13,53 @@ def select_entry():
 			
 	return render_template('entry/create/'+ res +'.html', display_dict = layout)
 
-# Update or Delete用メニューへ移行
+# Update and Delete用メニューへ移行
 @app.route('/entry/change', methods = ['POST'])
 def select_entry2():
 	res = request.form['post_value']
 	layout.set_cud_state(res)
 
-	return render_template('entry/'+ res + '/' + layout.layout_state + '.html', display_dict = layout)
+	return render_template('entry/settings/update_and_delete.html', display_dict = layout)
+
+# Update and Delete用メニューへidを渡す
+@app.route('/entry/changing', methods = ['POST'])
+def read_entry():
+	res = request.form['select_read']
+	# if res == 'None':
+	if   layout.layout_state == layout.menu[0]:
+		print("1")
+
+	elif layout.layout_state == layout.menu[1]:
+		entry = Authors.query.get(res)
+
+	elif layout.layout_state == layout.menu[2]:
+		print("1")
+
+	elif layout.layout_state == layout.menu[3]:
+		print("1")
+
+	return render_template('entry/update/' + layout.layout_state + '.html', entry = entry, display_dict = layout)
+
+# Update
+@app.route('/entry/changed/<int:id>', methods = ['POST'])
+def update_entry(id):
+	res = request.form
+	if   layout.layout_state == layout.menu[0]:
+		print("1")
+
+	elif layout.layout_state == layout.menu[1]:
+		entry = Authors.query.get(id)
+		entry.name = res["author_name"]
+		db.session.merge(entry)
+		db.session.commit()
+
+	elif layout.layout_state == layout.menu[2]:
+		print("1")
+
+	elif layout.layout_state == layout.menu[3]:
+		print("1")
+
+	return redirect(url_for('entry.show_stacks')) 
 
 # indexページへ移行
 @app.route('/', methods = ['POST'])

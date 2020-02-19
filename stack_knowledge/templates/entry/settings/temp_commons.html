@@ -17,15 +17,10 @@
 	<li class="nav-item">
 		<form action="{{ url_for('select_entry2')}}" method="POST" name="form2">
 			<input type="hidden" name="post_value" value="update">
-			<a href="javascript:form2.submit()" class="nav-link">修正</a>
+			<a href="javascript:form2.submit()" class="nav-link">修正・削除</a>
 		</form>
 	</li>
-	<li class="nav-item">
-		<form action="{{ url_for('select_entry2')}}" method="POST" name="form3">
-			<input type="hidden" name="post_value" value="delete">
-			<a href="javascript:form3.submit()" class="nav-link">削除</a>
-		</form>
-	</li>
+
 </ul>
 <script>$('#myTab li:nth-child({{ display_dict.cud_state }}) a').tab('show')</script>
 
