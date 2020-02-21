@@ -2,5 +2,23 @@
 
 
 {% block contents %}
+	<div class="form-group">
+		<label for="InputOutcomeTime">勉強時間（半角のみ）</label>
+		<input type="text" name="OutcomeTime" class="form-control" id="InputOutcomeTime" value={{ get_entries['stack_times'] }}>
+	</div>
 
+	{% with box_name = display_dict.display_dropbox[1][0], droplist = display_dict.display_dropbox[1][1], selected_id = get_entries['author_id'] %} 
+		{% include "parts/dropbox_details.html" %}
+	{% endwith %}
+
+	{% for i in range(1, 3 + 1)%}
+		{% with box_name = display_dict.display_dropbox[2][0] + '_' + i|string , droplist = display_dict.display_dropbox[2][1], selected_id = get_entries['subjects_groups_id'][i - 1] %} 
+			{% include "parts/dropbox_details.html" %}
+		{% endwith %}
+	{% endfor %}
+
+	<div class="form-group">
+		<label for="InputText">詳細</label>
+		<textarea class="form-control" id="InputText" name="OutcomesText" rows="3">{{ get_entries['text'] }}</textarea>
+	</div>
 {% endblock %}

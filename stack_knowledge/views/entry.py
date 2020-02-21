@@ -25,20 +25,42 @@ def select_entry2():
 @app.route('/entry/changing', methods = ['POST'])
 def read_entry():
 	res = request.form['select_read']
-	# if res == 'None':
+	get_entries = {}
 	if   layout.layout_state == layout.menu[0]:
-		print("1")
+		entry = Outcomes.query.get(res)
+		get_entries['id'] = entry.id
+		get_entries['stack_times'] = entry.stack_times
+		get_entries['author_id'] = entry.author_id
+		get_entries['text'] = entry.text
+
+		res_query = db.session.query(RelatedOutcomesAndSubjectsGroups.subjects_groups_id).filter(RelatedOutcomesAndSubjectsGroups.outcomes_id==entry.id).all()
+		get_entries['subjects_groups_id'] = [i[0] for i in res_query]
+		if len(get_entries['subjects_groups_id']) < 3:
+			for i in range(3 - len(get_entries['subjects_groups_id'])):
+				get_entries['subjects_groups_id'].append('None')
 
 	elif layout.layout_state == layout.menu[1]:
 		entry = Authors.query.get(res)
+		get_entries['id'] = entry.id
+		get_entries['name'] = entry.name
 
 	elif layout.layout_state == layout.menu[2]:
-		print("1")
+		entry = SubjectsGroups.query.get(res)
+		get_entries['id'] = entry.id
+		get_entries['group_name'] = entry.group_name
+
+		res_query = db.session.query(RelatedSubjectsAndGroups.related_subjects_id).filter(RelatedSubjectsAndGroups.related_subjects_groups_id==entry.id).all()
+		get_entries['subjects_id'] = [i[0] for i in res_query]
+		if len(get_entries['subjects_id']) < 3:
+			for i in range(3 - len(get_entries['subjects_id'])):
+				get_entries['subjects_id'].append('None')
 
 	elif layout.layout_state == layout.menu[3]:
-		print("1")
+		entry = Subjects.query.get(res)
+		get_entries['id'] = entry.id
+		get_entries['name'] = entry.name
 
-	return render_template('entry/update/' + layout.layout_state + '.html', entry = entry, display_dict = layout)
+	return render_template('entry/update/' + layout.layout_state + '.html', get_entries = get_entries, display_dict = layout)
 
 # Update
 @app.route('/entry/changed/<int:id>', methods = ['POST'])
